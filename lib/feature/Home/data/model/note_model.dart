@@ -1,31 +1,28 @@
+class NoteModel {
+  final String id;
+  final String title;
+  final String description;
+  final String userId;
 
-class Note {
-  String id;
-  String title;
-  String description;
-  String userId;
-
-  Note({
+  NoteModel({
     required this.id,
     required this.title,
     required this.description,
     required this.userId,
   });
 
-  factory Note.fromMap(Map<String, dynamic> map, String docId) {
-    return Note(
-      id: docId,
-      title: map['title'],
-      description: map['description'],
-      userId: map['userId'],
+  factory NoteModel.fromMap(Map<String, dynamic> map, String id) {
+    return NoteModel(
+      id: id,
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      userId: map['userId'] ?? '',
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'title': title,
-      'description': description,
-      'userId': userId,
-    };
-  }
+  Map<String, dynamic> toMap() => {
+    'title': title,
+    'description': description,
+    'userId': userId,
+  };
 }

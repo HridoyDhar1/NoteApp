@@ -1,34 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes/feature/Auth/presentation/controllers/auth_controller.dart';
-
+import '../controllers/auth_controller.dart';
 
 class LoginPage extends StatelessWidget {
-  final AuthController authController = Get.find();
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Login")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            TextField(controller: emailController, decoration: InputDecoration(labelText: "Email")),
-            TextField(controller: passwordController, decoration: InputDecoration(labelText: "Password"), obscureText: true),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: "Email"),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: "Password"),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                await authController.login(emailController.text, passwordController.text);
-                if (authController.isLoggedIn.value) {
-                  Get.offNamed('/home');
-                }
+              onPressed: () {
+                authController.login(
+                  emailController.text.trim(),
+                  passwordController.text.trim(),
+                );
               },
               child: Text("Login"),
             ),
-            TextButton(onPressed: () => Get.toNamed('/register'), child: Text("Register")),
+            TextButton(
+              onPressed: () => Get.toNamed('/register'),
+              child: Text("Don't have an account? Register here"),
+            )
           ],
         ),
       ),

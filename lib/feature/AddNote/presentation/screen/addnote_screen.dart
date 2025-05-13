@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:notes/feature/Home/presentation/controller/note_controller.dart';
 
 class AddNotePage extends StatelessWidget {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  final NotesController notesController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Add Note")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            TextField(controller: titleController, decoration: InputDecoration(labelText: "Title")),
-            TextField(controller: descriptionController, decoration: InputDecoration(labelText: "Description")),
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(labelText: "Title"),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: descriptionController,
+              maxLines: 5,
+              decoration: InputDecoration(labelText: "Description"),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                await FirebaseFirestore.instance.collection("notes").add({
-                  'title': titleController.text,
-                  'description': descriptionController.text,
-                });
-                Get.back();
+                await notesController.addNote(
+                  titleController.text.trim(),
+                  descriptionController.text.trim(),
+                );
+                Get.back(); // Return to HomePage
               },
               child: Text("Save Note"),
-            ),
+            )
           ],
         ),
       ),
