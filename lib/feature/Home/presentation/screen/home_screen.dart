@@ -32,10 +32,7 @@ class HomePage extends StatelessWidget {
               child: ListTile(
                 title: Text(note.title),
                 subtitle: Text(note.description),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => notesController.deleteNote(note.id),
-                ),
+               
               ),
             );
           },
