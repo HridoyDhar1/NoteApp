@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:notes/feature/Home/presentation/controller/home_controller.dart';
 
 class HomePage extends StatelessWidget {
-  final controller = Get.put(HomeController());
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Your Notes")),
-      body: Obx(() {
-        if (controller.notes.isEmpty) {
-          return Center(child: Text("No notes found."));
-        }
-        return ListView.builder(
-          itemCount: controller.notes.length,
-          itemBuilder: (context, index) {
-            final note = controller.notes[index];
-            return ListTile(
-              title: Text(note.title),
-              subtitle: Text(note.description),
-              trailing: Text(note.timestamp?.toString() ?? ''),
-            );
-          },
-        );
-      }),
+      appBar: AppBar(title: Text("Home")),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection("notes").snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text("No notes available"));
+          }
+          var notes = snapshot.data!.docs;
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              var note = notes[index];
+              return ListTile(
+                title: Text(note['title']),
+                subtitle: Text(note['description']),
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed('/add-note'),
         child: Icon(Icons.add),

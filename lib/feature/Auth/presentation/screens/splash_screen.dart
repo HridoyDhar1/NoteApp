@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes/feature/Auth/presentation/controllers/splash_controller.dart';
 
 
-class SplashPage extends StatelessWidget {
-  final SplashController controller = Get.put(SplashController());
-
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    controller.checkUserStatus();
+    Future.delayed(Duration(seconds: 3), () {
+      Get.offAllNamed('/login');  // Navigate to login after splash
+    });
+
     return Scaffold(
       body: Center(child: CircularProgressIndicator()),
     );
